@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TournamentAPI.Api.Extensions;
+using TournamentAPIv2.Core.Repositories;
 using TournamentAPIv2.Data.Data;
+using TournamentAPIv2.Data.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TournamentAPIv2ApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TournamentAPIv2ApiContext") ?? throw new InvalidOperationException("Connection string 'TournamentAPIv2ApiContext' not found.")));
@@ -16,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()
     .AddXmlDataContractSerializerFormatters();
+
+builder.Services.AddScoped<IUoW, UoW>();
 
 var app = builder.Build();
 
