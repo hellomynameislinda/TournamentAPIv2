@@ -22,7 +22,7 @@ namespace TournamentAPIv2.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> AnyAsynch(int id)
+        public Task<bool> AnyAsync(int id)
         {
             throw new NotImplementedException();
         }
