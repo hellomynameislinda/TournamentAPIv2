@@ -20,6 +20,8 @@ builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
     .AddNewtonsoftJson()
     .AddXmlDataContractSerializerFormatters();
 
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IUoW, UoW>();
 
 var app = builder.Build();

@@ -9,7 +9,7 @@ using TournamentAPIv2.Data.Data;
 
 namespace TournamentAPIv2.Data.Repositories
 {
-    internal class TournamentRepository : ITournamentRepository
+    public class TournamentRepository : ITournamentRepository
     {
         private readonly TournamentAPIv2ApiContext _context;
         public TournamentRepository(TournamentAPIv2ApiContext context)
