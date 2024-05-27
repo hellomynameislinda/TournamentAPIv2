@@ -60,6 +60,10 @@ namespace TournamentAPIv2.Api.Controllers
             }
 
             //  _context.Entry(game).State = EntityState.Modified;
+            if (!await _gameRepository.AnyAsync(id))
+            {
+                return NotFound();
+            }
             _gameRepository.Update(game);
 
             //try

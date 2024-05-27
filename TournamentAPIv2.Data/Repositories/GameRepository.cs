@@ -19,17 +19,6 @@ namespace TournamentAPIv2.Data.Repositories
             _context = context;
         }
 
-        public void Add(Game game)
-        {
-            _context.Game.Add(game);
-            _context.SaveChanges();
-        }
-
-        public async Task<bool> AnyAsync(int id)
-        {
-            return await _context.Game.AnyAsync(e => e.Id == id);
-        }
-
         public async Task<IEnumerable<Game>> GetAllAsync()
         {
             return await _context.Game.ToListAsync();
@@ -41,15 +30,26 @@ namespace TournamentAPIv2.Data.Repositories
             return await _context.Game.FindAsync(id);
         }
 
-        public void Remove(Game game)
+        public async Task<bool> AnyAsync(int id)
         {
-            _context.Game.Remove(game);
+            return await _context.Game.AnyAsync(g => g.Id == id);
+        }
+
+        public void Add(Game game)
+        {
+            _context.Game.Add(game);
             _context.SaveChanges();
         }
 
         public void Update(Game game)
         {
-            _context.Update(game);
+            _context.Game.Update(game);
+            _context.SaveChanges();
+        }
+
+        public void Remove(Game game)
+        {
+            _context.Game.Remove(game);
             _context.SaveChanges();
         }
     }
