@@ -11,18 +11,41 @@ namespace TournamentAPIv2.Data.Repositories
     public class UoW : IUoW
     {
         private readonly TournamentAPIv2ApiContext _context;
+        private ITournamentRepository _tournamentRepository;
+        private IGameRepository _gameRepository;
         public UoW(TournamentAPIv2ApiContext context)
         {
             _context = context;
         }
 
-        public ITournamentRepository TournamentRepository => throw new NotImplementedException();
-
-        public IGameRepository GameRepository => throw new NotImplementedException();
-
-        public Task CompleteAsync()
+        public ITournamentRepository TournamentRepository
         {
-            throw new NotImplementedException();
+            get
+            {
+                if (_tournamentRepository == null)
+                {
+                    _tournamentRepository = new TournamentRepository(_context);
+                }
+                return _tournamentRepository;
+            }
         }
+
+        public IGameRepository GameRepository
+        {
+            get
+            {
+                if (_gameRepository == null)
+                {
+                    _gameRepository = new GameRepository(_context);
+                }
+                return _gameRepository;
+            }
+        }
+
+        public async Task CompleteAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

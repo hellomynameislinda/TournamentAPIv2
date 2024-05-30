@@ -38,19 +38,19 @@ namespace TournamentAPIv2.Data.Repositories
         public void Add(Game game)
         {
             _context.Game.Add(game);
-            _context.SaveChanges();
+//            _context.SaveChanges();
         }
 
         public void Update(Game game)
         {
             _context.Game.Update(game);
-            _context.SaveChanges();
+//            _context.SaveChanges();
         }
 
         public void Remove(Game game)
         {
             _context.Game.Remove(game);
-            _context.SaveChanges();
+//            _context.SaveChanges();
         }
     }
 }

@@ -36,18 +36,18 @@ namespace TournamentAPIv2.Data.Repositories
         public void Add(Tournament tournament)
         {
             _context.Tournament.Add(tournament);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public void Update(Tournament tournament)
         {
             _context.Tournament.Update(tournament);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
         public void Remove(Tournament tournament)
         {
             _context.Tournament.Remove(tournament);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
     }
 }
