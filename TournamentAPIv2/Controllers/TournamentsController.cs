@@ -9,6 +9,12 @@ using TournamentAPIv2.Data.Data;
 using TournamentAPIv2.Core.Entities;
 using TournamentAPIv2.Data.Repositories;
 using TournamentAPIv2.Core.Repositories;
+using AutoMapper;
+using TournamentAPIv2.Core.Dto;
+using Azure;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NuGet.Protocol.Core.Types;
 
 namespace TournamentAPIv2.Api.Controllers
 {
@@ -19,12 +25,14 @@ namespace TournamentAPIv2.Api.Controllers
         //private readonly TournamentAPIv2ApiContext _context;
         //private readonly ITournamentRepository _tournamentRepository;
         private readonly IUoW _UoW;
+        private readonly IMapper _mapper;
 
         //public TournamentsController(ITournamentRepository tournamentRepository)
-        public TournamentsController(IUoW uoW)
+        public TournamentsController(IUoW uoW, IMapper mapper)
         {
             //_tournamentRepository = tournamentRepository;
             _UoW = uoW;
+            _mapper = mapper;
         }
 
         // GET: api/Tournaments
@@ -34,7 +42,8 @@ namespace TournamentAPIv2.Api.Controllers
             //return await _context.Tournament.ToListAsync();
             //var allTournaments= await _tournamentRepository.GetAllAsync();
             var allTournaments= await _UoW.TournamentRepository.GetAllAsync();
-            return allTournaments.ToList();
+            //return allTournaments.ToList();
+            return Ok(_mapper.Map<IEnumerable<TournamentDTO>>(allTournaments.ToList()));
         }
 
         // GET: api/Tournaments/5
@@ -50,7 +59,8 @@ namespace TournamentAPIv2.Api.Controllers
                 return NotFound();
             }
 
-            return tournament;
+            //return tournament;
+            return Ok(_mapper.Map<TournamentDTO>(tournament));
         }
 
         // PUT: api/Tournaments/5
@@ -87,6 +97,36 @@ namespace TournamentAPIv2.Api.Controllers
             //    }
             //}
 
+            return NoContent();
+        }
+
+        [HttpPatch("{tournamentId}")]
+        public async Task<ActionResult<TournamentDTO>> PatchTournament(int tournamentId, JsonPatchDocument<TournamentDTO> patchDocument)
+        {
+            if (patchDocument is null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tournament = await _UoW.TournamentRepository.GetAsync(tournamentId);
+
+            if (tournament is null)
+            {
+                return NotFound();
+            }
+
+            var patch = _mapper.Map<JsonPatchDocument<Tournament>>(patchDocument);
+
+            patch.ApplyTo(tournament, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _UoW.TournamentRepository.Update(tournament);
+            await _UoW.CompleteAsync();
+            
             return NoContent();
         }
 

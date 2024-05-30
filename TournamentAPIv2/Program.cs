@@ -23,6 +23,7 @@ builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<IUoW, UoW>();
+builder.Services.AddAutoMapper(typeof(TournamentMappings));
 
 var app = builder.Build();
 

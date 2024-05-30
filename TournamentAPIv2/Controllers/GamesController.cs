@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using TournamentAPIv2.Data.Data;
 using TournamentAPIv2.Core.Entities;
 using TournamentAPIv2.Core.Repositories;
+using AutoMapper;
+using TournamentAPIv2.Core.Dto;
 
 namespace TournamentAPIv2.Api.Controllers
 {
@@ -18,29 +20,34 @@ namespace TournamentAPIv2.Api.Controllers
         //private readonly TournamentAPIv2ApiContext _context;
         //private readonly IGameRepository _gameRepository;
         private readonly IUoW _UoW;
+        private readonly IMapper _mapper;
 
         //        public GamesController(TournamentAPIv2ApiContext context)
         //        public GamesController(IGameRepository gameRepository)
-        public GamesController(IUoW uoW)
+        public GamesController(IUoW uoW, IMapper mapper)
         {
             //_context = context;
             //_gameRepository = gameRepository ?? throw new ArgumentNullException(nameof(gameRepository));
             _UoW = uoW;
+            _mapper = mapper;
         }
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        //public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetGame()
         {
             // return await _context.Game.ToListAsync();
             //var allGames = await _gameRepository.GetAllAsync();
             var allGames = await _UoW.GameRepository.GetAllAsync();
-            return allGames.ToList();
+            //return allGames.ToList();
+            return Ok(_mapper.Map<IEnumerable<GameDTO>>(allGames.ToList()));
         }
 
         // GET: api/Games/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
+        //public async Task<ActionResult<Game>> GetGame(int id)
+        public async Task<ActionResult<GameDTO>> GetGame(int id)
         {
             // var game = await _context.Game.FindAsync(id);
             //var game = await _gameRepository.GetAsync(id);
@@ -51,7 +58,8 @@ namespace TournamentAPIv2.Api.Controllers
                 return NotFound();
             }
 
-            return game;
+            //return game;
+            return Ok(_mapper.Map<GameDTO>(game));
         }
 
         // PUT: api/Games/5
