@@ -100,8 +100,9 @@ namespace TournamentAPIv2.Api.Controllers
             return NoContent();
         }
 
+        // PATCH: api/Tournaments/5
         [HttpPatch("{tournamentId}")]
-        public async Task<ActionResult<TournamentDTO>> PatchTournament(int tournamentId, JsonPatchDocument<TournamentDTO> patchDocument)
+        public async Task<ActionResult<TournamentDTO>> PatchTournament(int tournamentId, JsonPatchDocument<Tournament> patchDocument)
         {
             if (patchDocument is null)
             {
@@ -115,9 +116,7 @@ namespace TournamentAPIv2.Api.Controllers
                 return NotFound();
             }
 
-            var patch = _mapper.Map<JsonPatchDocument<Tournament>>(patchDocument);
-
-            patch.ApplyTo(tournament, ModelState);
+            patchDocument.ApplyTo(tournament, ModelState);
 
             if (!ModelState.IsValid)
             {

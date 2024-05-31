@@ -10,6 +10,7 @@ using TournamentAPIv2.Core.Entities;
 using TournamentAPIv2.Core.Repositories;
 using AutoMapper;
 using TournamentAPIv2.Core.Dto;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace TournamentAPIv2.Api.Controllers
 {
@@ -98,6 +99,36 @@ namespace TournamentAPIv2.Api.Controllers
 
             return NoContent();
         }
+
+        // PATCH: api/Games/5
+        [HttpPatch("{gameId}")]
+        public async Task<IActionResult> PatchGame(int gameId, [FromBody] JsonPatchDocument<Game> patchDocument)
+        {
+            if (patchDocument is null)
+            {
+                return BadRequest();
+            }
+
+            var game = await _UoW.GameRepository.GetAsync(gameId);
+
+            if (game is null)
+            {
+                return NotFound();
+            }
+
+            patchDocument.ApplyTo(game, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _UoW.GameRepository.Update(game);
+            await _UoW.CompleteAsync();
+
+            return NoContent();
+        }
+
 
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

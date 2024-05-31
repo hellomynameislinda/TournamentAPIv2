@@ -19,7 +19,8 @@ namespace TournamentAPIv2.Data.Data
             var tournaments = SeedTournaments(60);
             await context.AddRangeAsync(tournaments);
 
-            // The save has to occur twice, as there is no nav Tournament object on Games (if I added that, POST to the API would not work properly)
+            // The save has to occur twice, as there is no nav Tournament object on Games (if I added that,
+            // POST to the API would not work properly)
             await context.SaveChangesAsync();
 
             var savedTournaments = await context.Tournament.ToListAsync();

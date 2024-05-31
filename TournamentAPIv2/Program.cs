@@ -6,10 +6,11 @@ using TournamentAPIv2.Data.Data;
 using TournamentAPIv2.Data.Repositories;
 
 /*
-1. Jag har lämnat kvar varje steg i koden, för att kunna gå tillbaka och kika på det igen. 
+   Jag har lämnat kvar varje steg i koden, för att kunna gå tillbaka och kika på det igen och jobba vidare på den
    Det gör det tyvärr lite rörigt att läsa.
-2. Patch-metoden har jag försökt implementera på Tournament, men insåg att jag inte riktigt 
-   har koll på PATCH, så jag har kommit en bit på väg, hoppas jag, men inte hela vägen fram.
+
+   De konstiga projektnamnet är för att jag lyckades pajja projektet och var tvungen att börja om från ett nytt fräscht projekt
+   efter några dagar ;)
  */
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,14 +19,13 @@ builder.Services.AddDbContext<TournamentAPIv2ApiContext>(options =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
+    .AddNewtonsoftJson()
+    .AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
-    .AddNewtonsoftJson()
-    .AddXmlDataContractSerializerFormatters();
 
 //builder.Services.AddScoped<IGameRepository, GameRepository>();
 //builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
